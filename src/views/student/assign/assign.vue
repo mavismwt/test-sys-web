@@ -16,19 +16,20 @@
           <el-col :span="4" @click.native="detail()"><assign-cell></assign-cell></el-col>
         </el-row>
     </div>
-    
   </div>
 </template>
 
 <script>
 import assignCell from './component/assign-cell.vue'
+import { getUser } from '@/api/login'//引入登录 api 接口
 
 export default {
   components: { assignCell },
   name: 'Assign',
   data() {
     return {
-      activeNames: ['1'],
+      user_id: this.$router.user_id,
+      data: {},
       items:[{
         title:"标题1",
         date:"2020.3.20"
@@ -40,7 +41,17 @@ export default {
       ]
     }
   },
+  mounted() {
+    this.getAssign()
+  },
   methods: {
+    getAssign() {
+      let user_id = localStorage.getItem('user_id');
+      getUser(user_id).then(response => {
+        this.data = response.data
+      }
+      )
+    },
     detail() {
       this.$router.push({path:'/student/assign/detail'})
     }

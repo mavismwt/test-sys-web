@@ -57,28 +57,23 @@ export default {
       // 为表单绑定验证功能
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
-          this.loading = true;
-          this.$store
-            .dispatch("Login", this.loginForm)
-            .then(response => {
-              this.loading = false;
-              console.log(response.data);
-              let code = response.data.code;
-              if (code == 200) {
-                this.$router.push({
-                  path: "/"+`${response.data.data.identity}`,
-                  query: { user_id: response.data.data.user_id }
-                });
-              } else {
-                this.$message({
-                  type: 'error',
-                  message: `${response.data.code} ` + `${response.data.message}`
-                });
-              }
-            })
-            .catch(() => {
-              this.loading = false;
-            });
+          login(this.loginForm.username,this.loginForm.password).then(response => {
+            let code = response.data.code;
+            if (code == 200) {
+              this.$router.push({
+                path: "/"+`${response.data.data.identity}`,
+                query: {user_id: response.data.data.user_id }
+              });
+              // 将登录名使用vuex传递到Home页面
+              this.$store.commit('setUsername',response.data.data.username);
+              this.$store.commit('setUserId',response.data.data.user_id);
+            }else {
+              this.$message({
+                type: 'error',
+                message: `${response.data.code} ` + `${response.data.message}`
+              });
+            }
+          })
         } else {
           this.dialogVisible = true;
           return false;

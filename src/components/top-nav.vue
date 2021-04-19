@@ -8,8 +8,7 @@
               <!-- 用户名下拉菜单 -->
               <el-dropdown class="user-name" trigger="click" @command="handleCommand">
                   <span class="el-dropdown-link">
-                      <!-- {{ username }} -->
-                      我的
+                      {{ username }}
                       <i class="el-icon-caret-bottom"></i>
                   </span>
                   <el-dropdown-menu slot="dropdown">
@@ -26,14 +25,13 @@
 export default {
   data() {
     return {
-      
     }
   },
   computed: {
-      username() {
-          let username = localStorage.getItem('ms_username');
-          return username ? username : this.name;
-      }
+    username() {
+      let userInfo = localStorage.getItem('username');
+      return userInfo;
+    }
   },
   methods:{
       // 用户名下拉菜单选择事件
