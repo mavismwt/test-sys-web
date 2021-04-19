@@ -8,7 +8,6 @@
       :default-active="$route.path"
       text-color="#bfcbd9"
       active-text-color="#409eff"
-      :collapse="isCollapse"
       :router= "true"
     >
       <template v-for="one in items">
@@ -49,7 +48,7 @@ export default {
   props:['items'],
   data() {
       return {
-        
+        isCollapse:"",
       }
   },
   computed: {
@@ -58,9 +57,7 @@ export default {
     }
   },
   created() {
-    bus.$on("collapse", msg => {
-      this.isCollapse = msg;
-    });
+    
   },
   methods: {
     handleOpen(key, keyPath) {},

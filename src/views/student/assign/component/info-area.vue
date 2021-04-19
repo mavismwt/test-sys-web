@@ -9,14 +9,14 @@
         </el-row>
         <el-row>
           <el-col :span="4">
-            <p class="info-left">发布者：张老师</p> 
+            <p class="info-left">发布者：{{getTeacher(assign.teachers)}}}</p> 
           </el-col>
           <el-col :span="6">
-            <p class="info-right">发布时间2020年3月20日</p>
+            <p class="info-right">开放时间：{{assign.date_start}} - {{assign.date_end}}</p>
           </el-col>
         </el-row>
         <el-row>
-          <p class="detail">很馋的u发i速度分别设计的咖啡杯的健康萨复活精客户端J地方那就放那的减肥哪家的打开后放点辣椒你饭卡神焕发范德萨匡扶汉室打击报复就啊谁都不分开就是大部分空间的身边</p>
+          <p class="detail">{{assign.detail}}</p>
         </el-row>
       </el-card>
     </div>
@@ -37,15 +37,22 @@
 import docCell from './doc-cell.vue'
 
 export default {
+  props:['assign'],
   components: { docCell },
   data() {
     return {
-      assign: {
-        title: "标题"
-      }
+      ass:{
+
+      },
+      teacherName:""
+    }
+  },
+  methods: {
+    getTeacher(teachers) {
+      let teacherJSON = JSON.parse(teachers)
+      return teacherJSON[0].username
     }
   }
-  
 }
 </script>
 
@@ -58,7 +65,6 @@ export default {
   text-align:left;
   display:block;
   height: 14px;
-  /* margin-top: -8px; */
 }
 .title-label {
   display: inline-block;
@@ -75,7 +81,6 @@ export default {
   font-size: 12px;
 }
 .detail {
-  margin-top: -6px;
   text-align: left;
   font-size: 14px;
 }

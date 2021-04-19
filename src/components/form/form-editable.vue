@@ -14,7 +14,6 @@
           style="margin-left:10px;float:left;"
           size="small"
           type="danger"
-          v-privilege="'peony-list-batch-delete'"
         >批量删除</el-button>
 
         <el-button
@@ -24,7 +23,6 @@
           icon="ios-cloud-download-outline"
           size="small"
           type="warning"
-          v-privilege="'peony-list-export-all'"
         >导出全部</el-button>
 
         <el-button
@@ -34,7 +32,6 @@
           icon="ios-download-outline"
           size="small"
           type="warning"
-          v-privilege="'peony-list-batch-export'"
         >批量导出</el-button>
       </el-row>
       <el-table
