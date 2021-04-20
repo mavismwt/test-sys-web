@@ -7,7 +7,7 @@
         <el-row style="margin-top:12px;" :v-loading="loading">
           <template v-for="item in items">
             <template v-if="isDue(item.date_end)">
-              <el-col :span="4" @click.native="detail(item.assgn_id)" 
+              <el-col :span="4" @click.native="detail(item.assign_id)" 
                 :index="item.index" :key="item.key">
                 <assign-cell :title="item.title"
                   :date="item.date_end" 
