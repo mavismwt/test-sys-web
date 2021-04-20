@@ -23,13 +23,11 @@
             @click="queryList"
             icon="el-icon-search"
             type="primary"
-            v-privilege="'peony-list-query'"
           >查询</el-button>
           <el-button
             @click="resetQueryList"
             icon="el-icon-refresh-right"
             type="default"
-            v-privilege="'peony-list-query'"
           >重置</el-button>
         </el-button-group>
       </el-row>

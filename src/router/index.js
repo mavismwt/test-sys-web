@@ -30,6 +30,14 @@ let router = new Router({
         {
           path:'/teacher/rank',
           component:() => import('../views/teacher/rank/rank.vue')
+        },
+        {
+          path:'/teacher/static',
+          component:() => import('../views/teacher/static/static.vue')
+        },
+        {
+          path:'/teacher/score',
+          component:() => import('../views/teacher/record/single-record.vue')
         }
       ]
     },

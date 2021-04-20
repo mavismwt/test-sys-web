@@ -2,10 +2,11 @@
   <div>
     <el-container :v-loading="loading">
       <el-col>
-        <el-page-header @back="goBack" :content="assign.title">
+        <el-page-header @back="goBack" :content="username">
         </el-page-header>
         <info-area :assign="assign"></info-area>
-        <doc-area></doc-area>
+        <doc-info></doc-info>
+        <score-info :score="assign.score" :weight="assign.weight"></score-info>
       </el-col>
     </el-container>
   </div>
@@ -14,21 +15,26 @@
 <script>
 import infoArea from '@/components/info-area.vue'
 import { getAssign } from '@/api/assign'
-import DocArea from './component/doc-area.vue'
+import ScoreInfo from './component/score-info.vue'
+import DocInfo from './component/doc-info.vue'
 
 export default {
-  components: { infoArea, DocArea },
+  components: { infoArea, ScoreInfo, DocInfo },
   data() {
     return {
-      assign_id: this.$route.query.assign_id,
+      //assign_id: this.$route.qeury.assign_id,
+      username:"王大虎",
       assign: {
+        title:"标题",
+        score:"100",
+        weight:"100"
         
       },
       loading: true
     }
   },
   mounted() {
-    this.getAssignDetail();
+    //this.getAssignDetail();
   },
   methods: {
     getAssignDetail() {

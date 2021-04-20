@@ -8,8 +8,8 @@
         <el-col span="3"><doc-cell></doc-cell></el-col>
       </el-row>
       <el-row>
-          <el-button type="default">查看文件</el-button>
-          <el-button type="primary">下载文件</el-button>
+          <el-button type="primary">上传文件</el-button>
+          <el-button type="danger">删除文件</el-button>
       </el-row>
     </el-card>
   </div>

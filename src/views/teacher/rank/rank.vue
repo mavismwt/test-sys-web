@@ -1,16 +1,15 @@
 <template>
   <div>
-    <form-filter></form-filter>
-    <form-editable></form-editable>
+    <form-rank></form-rank>
   </div>
 </template>
 
 <script>
-import FormEditable from '@/components/form/form-editable.vue'
 import formFilter from '@/components/form/form-filter.vue'
+import FormRank from './component/form-rank.vue'
 
 export default {
-  components: { formFilter, FormEditable },
+  components: { formFilter, FormRank },
 
 }
 </script>

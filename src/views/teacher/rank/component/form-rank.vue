@@ -1,5 +1,32 @@
 <template>
   <div>
+    <el-card>
+      <el-row>
+        <el-col span="6">班级：
+          <el-input placeholder="请输入班级名称" style="width: 180px" v-model="group" ></el-input>
+        </el-col>
+        <el-col span="6">姓名：
+          <el-input placeholder="请输入学生姓名" style="width: 180px" v-model="username" ></el-input>
+        </el-col>
+        <el-col span="6">学号：
+          <el-input placeholder="请输入学生学号" style="width: 180px" v-model="number" ></el-input>
+        </el-col>
+        <el-col span="6">
+          <el-button-group>
+            <el-button
+              @click="queryList"
+              icon="el-icon-search"
+              type="primary"
+            >查询</el-button>
+            <el-button
+              @click="resetQueryList"
+              icon="el-icon-refresh-right"
+              type="default"
+            >重置</el-button>
+          </el-button-group>
+        </el-col>
+      </el-row>
+    </el-card>
     <el-card style="margin-top:12px">
       <el-row>
         <el-button
@@ -45,31 +72,37 @@
           width="55">
         </el-table-column>
         <el-table-column
-          label="日期"
+          prop="number"
+          label="学号"
           sortable
-          width="120">
-          <template slot-scope="scope">{{ scope.row.date }}</template>
+          width="200">
         </el-table-column>
         <el-table-column
-          prop="name"
+          prop="username"
           label="姓名"
           sortable
-          width="120">
+          width="200px">
         </el-table-column>
         <el-table-column
-          prop="address"
-          label="地址"
+          prop="group"
+          label="班级"
           sortable
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
+          prop="score"
+          label="得分"
+          sortable
+          width="150px">
+        </el-table-column>
+        <el-table-column
           fixed="right"
           label="操作"
-          width="100">
-          <template slot-scope="scope">
-            <span>{{scope.$index}}</span>
-            <el-button @click="dialogTableVisible = true" type="text" size="small">查看</el-button>
-            <el-button @click="dialogFormVisible = true" type="text" size="small">编辑</el-button>
+          width="150">
+          <template>
+          <!-- <template slot-scope="scope"> -->
+            <!-- <span>{{scope.$index}}</span> -->
+            <el-button @click="dialogTableVisible = true" type="text" size="small">提交记录</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -90,29 +123,16 @@
         <el-button @click="toggleSelection()">取消选择</el-button>
       </div> -->
     </el-card>
-    <el-dialog title="收货地址" :visible.sync="dialogTableVisible">
+    <el-dialog title="得分记录" :visible.sync="dialogTableVisible">
       <el-table :data="gridData">
-        <el-table-column property="date" label="日期" width="150"></el-table-column>
-        <el-table-column property="name" label="姓名" width="200"></el-table-column>
-        <el-table-column property="address" label="地址"></el-table-column>
+        <el-table-column property="date" label="提交时间" width="150"></el-table-column>
+        <el-table-column property="name" label="题目" width="150"></el-table-column>
+        <el-table-column property="info" label="测试结果" width="150"></el-table-column>
+        <el-table-column property="score" label="得分" width="100"></el-table-column>
+        <el-table-column label="操作" width="100">
+            <el-button @click="recordDetail()" type="text" size="small">更改评分</el-button>
+        </el-table-column>
       </el-table>
-    </el-dialog>
-    <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
-        <el-form-item label="活动名称" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="活动区域" :label-width="formLabelWidth">
-          <el-select v-model="form.region" placeholder="请选择活动区域">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-      </div>
     </el-dialog>
   </div>
 </template>
@@ -123,67 +143,52 @@
       return {
         /* 弹出详情格 */
         gridData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
+          date: '2021-05-03',
+          name: '二叉树',
+          info: '通过',
+          score: '85'
         }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
+          date: '2021-05-03',
+          name: '二叉树',
+          info: '通过',
+          score: '85'
         }],
         dialogTableVisible: false,
         
         /* 弹出表单 */
         form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
+          title: '',
+          detail: '',
+          teachers: '',
+          score: '',
+          weight: '',
+          date_start: '',
+          date_end: '',
+          file_source:'',
+          file_report:'',
+          test_example: ''
         },
         dialogFormVisible: false,
         formLabelWidth: '120px',
 
         /* 表格数据 */
         tableData: [{
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-08',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-06',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-07',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },{
-          date: '2016-05-08',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-06',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
+          number: 'U201713327',
+          username: '王小虎',
+          group:'电信1704',
+          score: '85'
+        },
+        {
+          number: 'U201713327',
+          username: '王小虎',
+          group:'电信1704',
+          score: '85'
+        },
+        {
+          number: 'U201713327',
+          username: '王小虎',
+          group:'电信1704',
+          score: '85'
         }],
         multipleSelection: []
       }
@@ -208,6 +213,9 @@
       },
       handleClick(row) {
         console.log(row);
+      },
+      recordDetail() {
+
       }
     }
   }

@@ -36,6 +36,11 @@ export default {
           icon: "el-icon-s-flag",
           index: "/teacher/rank",
           title: "成绩排名"
+        },
+        {
+          icon: "el-icon-s-data",
+          index: "/teacher/static",
+          title: "信息统计"
         }
       ],
       user: {
