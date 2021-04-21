@@ -3,8 +3,8 @@
     <el-card>
       <el-row>
         <el-col :span="6">班级：
-          <!-- <el-input placeholder="请输入班级名称" style="width: 180px" v-model="group" ></el-input> -->
-          <el-select
+          <el-input placeholder="请输入班级名称" style="width: 180px" v-model="collection" ></el-input>
+          <!-- <el-select
             v-model="value"
             filterable
             remote
@@ -18,12 +18,12 @@
               :label="item.label"
               :value="item.value">
             </el-option>
-          </el-select>
+          </el-select> -->
         </el-col>
         <el-col :span="6">
           <el-button-group>
             <el-button
-              @click="queryList"
+              @click="getStudents"
               icon="el-icon-search"
               type="primary"
             >查询</el-button>
@@ -38,20 +38,6 @@
     </el-card>
     <el-card style="margin-top:12px">
       <el-row>
-        <el-button
-          @click="showAddPeonyForm"
-          style="margin-left:10px;float:left;"
-          size="small"
-          type="primary"
-          v-privilege="'peony-list-add'"
-        >新建数据</el-button>
-        <el-button
-          @click="showBatchDeleteModal"
-          style="margin-left:10px;float:left;"
-          size="small"
-          type="danger"
-        >批量删除</el-button>
-
         <el-button
           :loading="allExportBtnLoading"
           @click="exportAll"
@@ -71,31 +57,34 @@
       </el-row>
       <el-table
         ref="multipleTable"
-        :data="group.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+        :data="students.slice((currentPage-1)*pageSize,currentPage*pageSize)"
         tooltip-effect="dark"
         style="width: 100%"
-        @selection-change="handleSelectionChange">
+        @selection-change="handleSelectionChange"
+        v-loading="loading">
         <el-table-column
           type="selection"
           width="55">
         </el-table-column>
         <el-table-column
-          prop="number"
+          prop="username"
           label="学号"
           sortable
           width="200">
         </el-table-column>
         <el-table-column
-          prop="username"
+          prop="nickname"
           label="姓名"
           sortable
           width="200px">
         </el-table-column>
         <el-table-column
-          prop="group"
           label="班级"
           sortable
           show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{getCollectionName(scope.row.collection)}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="score"
@@ -107,10 +96,8 @@
           fixed="right"
           label="操作"
           width="150">
-          <template>
-          <!-- <template slot-scope="scope"> -->
-            <!-- <span>{{scope.$index}}</span> -->
-            <el-button @click="dialogTableVisible = true" type="text" size="small">提交记录</el-button>
+          <template slot-scope="scope">
+            <el-button @click="getRecord(scope.row.user_id)" type="text" size="small">提交记录</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -119,10 +106,10 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage4"
-        :page-sizes="[10, 20, 30, 40]"
+        :page-sizes="[10, 20]"
         :page-size="10"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="group.length"
+        :total="students.length"
         style="margin-top: 20px"
         >
       </el-pagination>
@@ -146,18 +133,15 @@
 </template>
 
 <script>
+import { getUserS } from '@/api/login';
   export default {
     data() {
       return {
-        group: [
 
-        ],
-        group_name:["1701","1702","1703"],
+        students: [],
+        collection:"",
+        loading: false,
         
-        /*查找框 */
-        options: [],
-        list: [],
-        value: [],
         /* 弹出详情格 */
         gridData: [{
           date: '2021-05-03',
@@ -171,6 +155,7 @@
           score: '85'
         }],
         dialogTableVisible: false,
+
         queryLoading: false,
         currentPage: 1,
         pageSize: 10,
@@ -179,24 +164,35 @@
       
     },
     mounted() {
-      this.list = this.group_name.map(item => {
-        return { value: `${item}`, label: `${item}` };
-      });
+
     },
+
     methods: {
-      remoteMethod(query) {
-        if (query !== '') {
-          this.queryLoading = true;
-          setTimeout(() => {
-            this.queryLoading = false;
-            this.options = this.list.filter(item => {
-              return item.label.toLowerCase()
-                .indexOf(query.toLowerCase()) > -1;
-            });
-          }, 200);
+      //获取学生列表
+      getStudents() {
+        if (this.collection != "") {
+          getUserS(this.collection,"").then(response => {
+            this.loading = true
+            if (response.data.code == 200) {
+              let resData = response.data.data
+              this.students = resData
+              this.loading = false
+            } else {
+              this.loading = false
+              this.$message({
+                type: 'error',
+                message: `${response.data.code} ` + `${response.data.message}`
+              });
+            }
+          })
         } else {
-          this.options = [];
+          this.$message("请输入班级名称进行查询")
         }
+      },
+      //获取班级名称
+      getCollectionName(collection) {
+        const json = JSON.parse(collection)
+        return json[0].collection_name
       },
       //选择一页显示多少行
       handleSizeChange(val) {
@@ -209,6 +205,8 @@
           console.log(`当前页: ${val}`);
           this.currentPage = val;
       },
+
+      // 选择控制
       toggleSelection(rows) {
         if (rows) {
           rows.forEach(row => {
@@ -221,15 +219,13 @@
       handleSelectionChange(val) {
         this.multipleSelection = val;
       },
-      handleEdit(row) {
-        console.log(row);
-      },
-      handleClick(row) {
-        console.log(row);
+      
+
+      getRecord(user_id) {
+
       },
 
-
-      recordDetail() {
+      recordDetail(user_id,) {
 
       }
     }
