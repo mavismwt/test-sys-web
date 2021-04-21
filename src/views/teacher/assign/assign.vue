@@ -8,7 +8,7 @@
         <el-col :span="6"> 
           <el-button-group>
             <el-button
-              @click="queryList"
+              @click="getAssign()"
               icon="el-icon-search"
               type="primary"
             >查询</el-button>
@@ -25,7 +25,6 @@
       <el-row>
         <el-button
           @click="dialogAddVisible = true"
-          @add="newAssign"
           style="margin-left:10px;float:left;"
           size="small"
           type="primary"
@@ -45,15 +44,15 @@
           icon="ios-cloud-download-outline"
           size="small"
           type="warning"
-        >分发作业</el-button>
-        <!-- <el-button
+        >添加助教</el-button>
+        <el-button
           :loading="batchExportBtnLoading"
           @click="batchExport"
           style="margin-right:10px;float:right;"
           icon="ios-download-outline"
           size="small"
           type="warning"
-        >批量导出</el-button> -->
+        >分发作业</el-button>
       </el-row>
 
       <el-table
@@ -123,13 +122,12 @@
     </el-dialog>
 
     <el-dialog title="新建作业" :visible.sync="dialogAddVisible">
-      <add-form :teachers="getTeacher()" @submitAdd="submitAddAssign" @cancelAdd="dialogAddVisible = false"></add-form>
+      <add-form :formData="defaultInfo" @submitAdd="submitAddAssign" @cancelAdd="dialogAddVisible = false"></add-form>
     </el-dialog>
 
     <el-dialog title="编辑作业" :visible.sync="dialogFormVisible">
       <edit-form :form="form" @submit="submitUpdateAssign" @cancel="dialogFormVisible = false"></edit-form>
     </el-dialog>
-
 
   </div>
 </template>
@@ -144,34 +142,40 @@ export default {
   components: { editForm,AddForm },
   data() {
     return {
-      assign: [{
-        /* 表格数据 */
-      }],
+
+      /* 表格数据 */
+      assign: [{}],
       loading: true,
       currentPage: 1,
       pageSize: 10,
-     
-      form: {
-         /* 弹出表单 */
-      },
-      dialogFormVisible: false,
       formLabelWidth: '120px',
+      title:"",  //查询
 
-      dialogTableVisible: false,
-      dialogDeleteVisible: false,
+      /* 弹出表单(新建) */
+      defaultInfo:{},
       dialogAddVisible: false,
+     
+      /* 弹出表单(编辑) */
+      form: {},
+      dialogFormVisible: false,
+
+      /* 删除数据 */
       multipleSelection: [],
-      deleteLoading: false
+      deleteLoading: false,
+
+      /* 提交记录 */
+      dialogTableVisible: false,
     }
   },
   mounted() {
     this.getAssign();
+    this.getTeacher();
   },
   methods: {
     //获取表格
     getAssign() {
       const username = localStorage.getItem('username');
-      getAssignT(username).then(response => {
+      getAssignT(username,this.title).then(response => {
         if (response.data.code == 200) {
           let resData = response.data.data
           if (resData != null) {
@@ -190,30 +194,30 @@ export default {
 
     //批量删除
     handleBatchDelete() {
-      this.deleteLoading = true
       var arr = [];
       var assign_id = "";
       for (var i = 0; i<this.multipleSelection.length; i ++) {
         arr.push(this.multipleSelection[i].assign_id);
         assign_id = `(`+arr.toLocaleString()+`)`;
       }
-      console.log(assign_id)
-      this.dialogDeleteVisible = true
-      deleteAssign(assign_id).then(response => {
-        if (response.data.code == 200 && response.data.data) {
-          this.deleteLoading = false;
-          this.$message({
-            message: "删除成功"
-          });
-          this.getAssign()
-        } else {
-          this.deleteLoading = false;
-          this.$message({
-            type: 'error',
-            message: "删除失败"
-          });
-        }
-      })
+      if (assign_id != "") {
+        this.deleteLoading = true
+        deleteAssign(assign_id).then(response => {
+          if (response.data.code == 200 && response.data.data) {
+            this.deleteLoading = false;
+            this.$message({
+              message: "删除成功"
+            });
+            this.getAssign()
+          } else {
+            this.deleteLoading = false;
+            this.$message({
+              type: 'error',
+              message: "删除失败"
+            });
+          }
+        })
+      }
     },
 
     //新建数据
@@ -224,14 +228,21 @@ export default {
       });
       this.getAssign()
     },
+
     //新建数据时带上自己的身份信息
     getTeacher() {
-      let username = localStorage.getItem('username');
-      let user_id = localStorage.getItem('user_id');
-      let name = localStorage.getItem('nickname');
+      const username = localStorage.getItem('username');
+      const user_id = localStorage.getItem('user_id');
+      const nickname = localStorage.getItem('nickname');
+      const json = [{
+        username: username,
+        user_id: user_id,
+        nickname: nickname
+      }]
+      this.defaultInfo.teachers = JSON.stringify(json)
 
-      return name;
-
+      const date = new Date()
+      this.defaultInfo.date_start = date
     },
 
 
@@ -241,6 +252,12 @@ export default {
       this.$message({
         message: `修改成功`
       });
+      this.getAssign()
+    },
+
+    //查询题目(重置)
+    resetQueryList() {
+      this.title = "",
       this.getAssign()
     },
 

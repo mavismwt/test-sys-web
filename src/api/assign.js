@@ -11,38 +11,30 @@ export function getAssign(assign_id) {
   })
 }
 
-//获取个人作业-学生
+//获取作业-学生
 export function getAssignS(username) {
   return request({
     url:'/assign/student',
     method:'get',
     params: {
-      'username': username
+      'username': username,
+      'title': ""
     }
   })
 }
 
-//获取个人作业-教师
-export function getAssignT(username) {
+//获取作业-教师
+export function getAssignT(username,title) {
   return request({
     url:'/assign/teacher',
     method:'get',
     params: {
-      'username': username
-    }
-  })
-}
-
-//条件查找
-export function getAssignByTitle(title) {
-  return request({
-    url:'/assign/title',
-    method:'get',
-    body: {
+      'username': username,
       'title': title
     }
   })
 }
+
 
 //新建作业-教师
 export function addAssign(assign) {
