@@ -55,6 +55,24 @@ export function updateAssign(assign) {
   })
 }
 
+//修改作业-助教
+export function updateAssignTeacher(assign) {
+  return request({
+    url:'/assign/update/teacher',
+    method:'post',
+    data: assign
+  })
+}
+
+//修改作业-学生
+export function updateAssignStudent(assign) {
+  return request({
+    url:'/assign/update/student',
+    method:'post',
+    data: assign
+  })
+}
+
 
 //批量删除=教师
 export function deleteAssign(assign_id) {

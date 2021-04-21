@@ -133,7 +133,7 @@
 </template>
 
 <script>
-import { getUserS } from '@/api/login';
+import { getUserQuery } from '@/api/login';
   export default {
     data() {
       return {
@@ -171,7 +171,7 @@ import { getUserS } from '@/api/login';
       //获取学生列表
       getStudents() {
         if (this.collection != "") {
-          getUserS(this.collection,"").then(response => {
+          getUserQuery(this.collection,"","student").then(response => {
             this.loading = true
             if (response.data.code == 200) {
               let resData = response.data.data
@@ -191,8 +191,16 @@ import { getUserS } from '@/api/login';
       },
       //获取班级名称
       getCollectionName(collection) {
-        const json = JSON.parse(collection)
-        return json[0].collection_name
+        const json = JSON.parse(collection);
+        var str = "";
+        for (var i=0; i<json.length; i++) {
+          str += json[i].collection_name;
+        }
+        return str;
+      },
+      resetQueryList() {
+        this.collection = "",
+        this.students = []
       },
       //选择一页显示多少行
       handleSizeChange(val) {

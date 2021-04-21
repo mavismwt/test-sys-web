@@ -23,26 +23,13 @@ export function getUser(user_id) {
   })
 }
 
-//条件查询-学生
-export function getUserS(collection,nickname) {
+//条件查询
+export function getUserQuery(collection,nickname,identity) {
   return request({
     url:'/getUsers',
     method:'get',
     params: {
-      'identity':'student',
-      'collection': collection,
-      'nickname': nickname
-    }
-  })
-}
-
-//条件查询-教师
-export function getUserT(collection,nickname) {
-  return request({
-    url:'/getUsers',
-    method:'get',
-    params: {
-      'identity':'teacher',
+      'identity': identity,
       'collection': collection,
       'nickname': nickname
     }

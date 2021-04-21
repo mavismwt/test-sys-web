@@ -38,16 +38,14 @@
         >批量删除</el-button>
 
         <el-button
-          :loading="allExportBtnLoading"
-          @click="dispatchAssign"
+          @click="addAssitTeacher"
           style="margin-right:10px;float:right;"
           icon="ios-cloud-download-outline"
           size="small"
           type="warning"
         >添加助教</el-button>
         <el-button
-          :loading="batchExportBtnLoading"
-          @click="batchExport"
+          @click="addStudents"
           style="margin-right:10px;float:right;"
           icon="ios-download-outline"
           size="small"
@@ -129,17 +127,21 @@
       <edit-form :form="form" @submit="submitUpdateAssign" @cancel="dialogFormVisible = false"></edit-form>
     </el-dialog>
 
+    <el-dialog :title="queryData.title" :visible.sync="dialogUserVisible">
+      <user-table :queryData="queryData" @submit="dialogUserVisible = false" @cancel="dialogUserVisible = false"></user-table>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import { getAssignT,deleteAssign } from '@/api/assign';
 import editForm from './component/edit-form.vue';
-import { getAssign } from '../../../api/assign';
 import AddForm from './component/add-form.vue';
+import UserTable from './component/user-table.vue';
 
 export default {
-  components: { editForm,AddForm },
+  components: { editForm,AddForm, UserTable },
   data() {
     return {
 
@@ -165,6 +167,15 @@ export default {
 
       /* 提交记录 */
       dialogTableVisible: false,
+
+      /* 选取用户 */
+      dialogUserVisible: false,
+      queryData:{
+        title:"",
+        collection:"",
+        nickname:"",
+        identity:""
+      }
     }
   },
   mounted() {
@@ -228,7 +239,6 @@ export default {
       });
       this.getAssign()
     },
-
     //新建数据时带上自己的身份信息
     getTeacher() {
       const username = localStorage.getItem('username');
@@ -255,14 +265,25 @@ export default {
       this.getAssign()
     },
 
+    //添加助教
+    addAssitTeacher() {
+      this.queryData.title = "添加助教"
+      this.queryData.identity = "teacher";
+      this.dialogUserVisible = true;
+    },
+    //分发作业
+    addStudents() {
+      this.queryData.title = "分发作业"
+      this.queryData.identity = "student";
+      this.dialogUserVisible = true;
+    },
+
+
     //查询题目(重置)
     resetQueryList() {
       this.title = "",
       this.getAssign()
     },
-
-    //分发作业
-    
 
     //每页条数改变时触发 选择一页显示多少行
     handleSizeChange(val) {

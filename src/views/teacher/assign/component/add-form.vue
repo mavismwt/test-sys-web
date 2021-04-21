@@ -120,10 +120,6 @@ export default {
   props:['formData'],
   data() {
     return {
-      // formData: {
-      //   date_start: "2021-02-09 00:00",
-      //   teachers:""
-      // },
       rules: {
         title: [
           {required: true, message: '标题不可为空', trigger: 'blur'}

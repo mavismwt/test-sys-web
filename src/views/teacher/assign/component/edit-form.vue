@@ -51,18 +51,6 @@
             show-word-limit>
           </el-input>
         </el-form-item>
-        <!-- <el-form-item label="源码文件" :label-width="formLabelWidth">
-          <el-input v-model="file_source"
-            type="file"
-            accept="image/png, image/jpeg">
-          </el-input>
-        </el-form-item>
-        <el-form-item label="报告文件" :label-width="formLabelWidth">
-          <el-input v-model="form.file_report"
-            type="file"
-            accept="image/png, image/jpeg">
-          </el-input>
-        </el-form-item> -->
         <el-row>
           <el-col :span="12">
             <el-form-item label="得分" :label-width="formLabelWidth">
@@ -97,7 +85,7 @@
 </template>
 
 <script>
-import { addAssign, updateAssign } from '../../../../api/assign'
+import { updateAssign } from '../../../../api/assign'
 
 export default {
   props:['form'],
