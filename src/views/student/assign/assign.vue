@@ -39,7 +39,7 @@
 
 <script>
 import assignCell from './component/assign-cell.vue'
-import { getUser } from '@/api/login'//引入登录 api 接口
+import { getAssignS } from '@/api/assign'//引入登录 api 接口
 
 export default {
   components: { assignCell },
@@ -48,15 +48,7 @@ export default {
     return {
       user_id: this.$router.user_id,
       data: {},
-      items:[{
-        title:"标题1",
-        date:"2020.3.20"
-      },
-      {
-        title:"标题2",
-        date:"2020.3.22"
-      }
-      ],
+      items:[],
       loading: true
     }
   },
@@ -65,13 +57,12 @@ export default {
   },
   methods: {
     getAssign() {
-      const user_id = localStorage.getItem('user_id');
-      getUser(user_id).then(response => {
+      const user_id = localStorage.getItem('username');
+      getAssignS(user_id).then(response => {
         if (response.data.code == 200) {
           let resData = response.data.data
-          if (resData.assign != null) {
-            let resJSON = JSON.parse(resData.assign);
-            this.items = resJSON;
+          if (resData!= null) {
+            this.items = resData;
           }
           this.loading = false
         } else {

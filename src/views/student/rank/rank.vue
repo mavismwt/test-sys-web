@@ -8,35 +8,13 @@
       <label class="rank-label">1</label>
       <label class="title-label"> 位</label>
     </el-row>
-    <!-- <el-card>
-      <el-row>
-        <el-col span="6"> 题目：
-          <el-input placeholder="请输入题目标题" style="width: 180px" v-model="title"></el-input>
-        </el-col>
-        <el-col span="6"> 
-          <el-button-group>
-            <el-button
-              @click="queryList"
-              icon="el-icon-search"
-              type="primary"
-            >查询</el-button>
-            <el-button
-              @click="resetQueryList"
-              icon="el-icon-refresh-right"
-              type="default"
-            >重置</el-button>
-        </el-button-group>
-        </el-col>
-      </el-row>
-    </el-card> -->
-    
     <el-card style="margin-top:12px">
       <el-table
         ref="multipleTable"
-        :data="assign"
+        :data="assign.slice((currentPage-1)*pageSize,currentPage*pageSize)"
         tooltip-effect="dark"
         style="width: 100%"
-        @selection-change="handleSelectionChange">
+        v-loading="loading">
         <el-table-column
           prop="date_end"
           label="截止日期"
@@ -66,11 +44,11 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage4"
-        :page-sizes="[10, 20, 30, 40]"
+        :current-page="currentPage"
+        :page-sizes="[10, 20]"
         :page-size="10"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="40"
+        :total="assign.length"
         style="margin-top: 20px"
         >
       </el-pagination>
@@ -80,6 +58,8 @@
 </template>
 
 <script>
+  import { getUser } from '@/api/login'
+
   export default {
     data() {
       return {
@@ -98,29 +78,46 @@
           date_end: '2016-05-03',
           title: '数组排序',
           score: 85
-        }]
+        }],
+        currentPage: 1,
+        pageSize: 10,
+        loading: true,
       }
       
     },
-
+    mounted() {
+      this.getAssign()
+    },
     methods: {
-      toggleSelection(rows) {
-        if (rows) {
-          rows.forEach(row => {
-            this.$refs.multipleTable.toggleRowSelection(row);
-          });
-        } else {
-          this.$refs.multipleTable.clearSelection();
-        }
+      getAssign() {
+        const user_id = localStorage.getItem('user_id');
+        getUser(user_id).then(response => {
+          if (response.data.code == 200) {
+            let resData = response.data.data
+            if (resData.assign != null) {
+              let resJSON = JSON.parse(resData.assign);
+              this.assign = resJSON;
+            }
+            this.loading = false
+          } else {
+            this.loading = false
+            this.$message({
+              type: 'error',
+              message: `${response.data.code} ` + `${response.data.message}`
+            });
+          }
+        })
       },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
+      //每页条数改变时触发 选择一页显示多少行
+      handleSizeChange(val) {
+          console.log(`每页 ${val} 条`);
+          this.currentPage = 1;
+          this.pageSize = val;
       },
-      handleEdit(row) {
-        console.log(row);
-      },
-      handleClick(row) {
-        console.log(row);
+      //当前页改变时触发 跳转其他页
+      handleCurrentChange(val) {
+          console.log(`当前页: ${val}`);
+          this.currentPage = val;
       }
     }
   }

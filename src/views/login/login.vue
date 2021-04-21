@@ -67,6 +67,7 @@ export default {
               // 将登录名使用vuex传递到Home页面
               this.$store.commit('setUsername',response.data.data.username);
               this.$store.commit('setUserId',response.data.data.user_id);
+              this.$store.commit('setNickname',response.data.data.nickname);
             }else {
               this.$message({
                 type: 'error',

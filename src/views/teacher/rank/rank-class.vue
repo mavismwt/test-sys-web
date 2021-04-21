@@ -2,10 +2,16 @@
   <div>
     <el-card>
       <el-row>
-        <el-col span="6"> 题目：
-          <el-input placeholder="请输入题目标题" style="width: 180px" v-model="title"></el-input>
+        <el-col span="6">班级：
+          <el-input placeholder="请输入班级名称" style="width: 180px" v-model="group" ></el-input>
         </el-col>
-        <el-col span="6"> 
+        <el-col span="6">姓名：
+          <el-input placeholder="请输入学生姓名" style="width: 180px" v-model="username" ></el-input>
+        </el-col>
+        <el-col span="6">学号：
+          <el-input placeholder="请输入学生学号" style="width: 180px" v-model="number" ></el-input>
+        </el-col>
+        <el-col span="6">
           <el-button-group>
             <el-button
               @click="queryList"
@@ -17,7 +23,7 @@
               icon="el-icon-refresh-right"
               type="default"
             >重置</el-button>
-        </el-button-group>
+          </el-button-group>
         </el-col>
       </el-row>
     </el-card>
@@ -57,7 +63,7 @@
       </el-row>
       <el-table
         ref="multipleTable"
-        :data="tableData"
+        :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
         tooltip-effect="dark"
         style="width: 100%"
         @selection-change="handleSelectionChange">
@@ -66,20 +72,26 @@
           width="55">
         </el-table-column>
         <el-table-column
-          label="创建日期"
+          prop="number"
+          label="学号"
           sortable
           width="200">
-          <template slot-scope="scope">{{ scope.row.date }}</template>
         </el-table-column>
         <el-table-column
-          prop="name"
-          label="标题"
+          prop="username"
+          label="姓名"
+          sortable
+          width="200px">
+        </el-table-column>
+        <el-table-column
+          prop="group"
+          label="班级"
           sortable
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-          prop="record"
-          label="提交人数"
+          prop="score"
+          label="得分"
           sortable
           width="150px">
         </el-table-column>
@@ -91,7 +103,6 @@
           <!-- <template slot-scope="scope"> -->
             <!-- <span>{{scope.$index}}</span> -->
             <el-button @click="dialogTableVisible = true" type="text" size="small">提交记录</el-button>
-            <el-button @click="dialogFormVisible = true" type="text" size="small">作业详情</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -103,7 +114,7 @@
         :page-sizes="[10, 20, 30, 40]"
         :page-size="10"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="40"
+        :total="tableData.length"
         style="margin-top: 20px"
         >
       </el-pagination>
@@ -112,10 +123,10 @@
         <el-button @click="toggleSelection()">取消选择</el-button>
       </div> -->
     </el-card>
-    <el-dialog title="提交记录" :visible.sync="dialogTableVisible">
+    <el-dialog title="得分记录" :visible.sync="dialogTableVisible">
       <el-table :data="gridData">
         <el-table-column property="date" label="提交时间" width="150"></el-table-column>
-        <el-table-column property="name" label="提交者" width="150"></el-table-column>
+        <el-table-column property="name" label="题目" width="150"></el-table-column>
         <el-table-column property="info" label="测试结果" width="150"></el-table-column>
         <el-table-column property="score" label="得分" width="100"></el-table-column>
         <el-table-column fixed="right" label="操作" width="100">
@@ -123,102 +134,6 @@
         </el-table-column>
       </el-table>
     </el-dialog>
-    <el-dialog title="编辑作业" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
-        <el-form-item label="作业标题" :label-width="formLabelWidth" prop="title">
-          <el-input v-model="form.title" 
-            autocomplete="off"
-            placeholder="请输入作业标题"
-            maxlength="20"
-            show-word-limit>
-          </el-input>
-        </el-form-item>
-        <el-form-item label="作业详情" :label-width="formLabelWidth">
-          <el-input v-model="form.detail"
-            type="textarea"
-            autocomplete="off"
-            placeholder="请输入作业详情"
-            :autosize="{ minRows: 3, maxRows: 5}"
-            maxlength="200"
-            show-word-limit>
-          </el-input>
-        </el-form-item>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="创建日期" :label-width="formLabelWidth">
-              <el-date-picker
-                v-model="value1"
-                type="date"
-                placeholder="选择日期"
-                format="yyyy 年 MM 月 dd 日"
-                disabled="true">
-              </el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="截止日期" :label-width="formLabelWidth">
-              <el-date-picker
-                v-model="value1"
-                type="date"
-                placeholder="选择日期"
-                format="yyyy 年 MM 月 dd 日">
-              </el-date-picker>
-            </el-form-item></el-col>
-        </el-row>
-        <el-form-item label="测试用例" :label-width="formLabelWidth">
-          <el-input v-model="form.test_example"
-            type="textarea"
-            autocomplete="off"
-            placeholder="请输入测试用例"
-            :autosize="{ minRows: 3, maxRows: 5}"
-            maxlength="200"
-            show-word-limit>
-          </el-input>
-        </el-form-item>
-        <el-form-item label="源码文件" :label-width="formLabelWidth">
-          <el-input v-model="form.file_source"
-            type="file"
-            accept="image/png, image/jpeg">
-          </el-input>
-        </el-form-item>
-        <el-form-item label="报告文件" :label-width="formLabelWidth">
-          <el-input v-model="form.file_report"
-            type="file"
-            accept="image/png, image/jpeg">
-          </el-input>
-        </el-form-item>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="得分" :label-width="formLabelWidth">
-              <el-input v-model="form.score"
-                type="number"
-                autocomplete="off"
-                placeholder="0~100"
-                min="10" 
-                max="100"
-                disabled="true">
-              </el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="权重" :label-width="formLabelWidth">
-              <el-input v-model="form.weight"
-                type="number"
-                autocomplete="off"
-                placeholder="0~100"
-                min="10" 
-                max="100">
-              </el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-      </div>
-    </el-dialog>
-      
   </div>
 </template>
 
@@ -229,12 +144,12 @@
         /* 弹出详情格 */
         gridData: [{
           date: '2021-05-03',
-          name: '王小虎',
+          name: '二叉树',
           info: '通过',
           score: '85'
         }, {
           date: '2021-05-03',
-          name: '王小虎',
+          name: '二叉树',
           info: '通过',
           score: '85'
         }],
@@ -258,32 +173,42 @@
 
         /* 表格数据 */
         tableData: [{
-          date: '2016-05-03',
-          name: '二叉树',
-          record: '11/22'
-        }, {
-          date: '2016-05-02',
-          name: '二叉树',
-          record: '15/22'
-        }, {
-          date: '2016-05-04',
-          name: '二叉树',
-          record: '13/22'
-        }, {
-          date: '2016-05-01',
-          name: '二叉树',
-          record: '11/22'
-        }, {
-          date: '2016-05-08',
-          name: '二叉树',
-          record: '1/22'
+          number: 'U201713327',
+          username: '王小虎',
+          group:'电信1704',
+          score: '85'
+        },
+        {
+          number: 'U201713327',
+          username: '王小虎',
+          group:'电信1704',
+          score: '85'
+        },
+        {
+          number: 'U201713327',
+          username: '王小虎',
+          group:'电信1704',
+          score: '85'
         }],
+        currentPage: 1,
+        pageSize: 10,
         multipleSelection: []
       }
       
     },
 
     methods: {
+      //选择一页显示多少行
+      handleSizeChange(val) {
+          console.log(`每页 ${val} 条`);
+          this.currentPage = 1;
+          this.pageSize = val;
+      },
+      //跳转其他页
+      handleCurrentChange(val) {
+          console.log(`当前页: ${val}`);
+          this.currentPage = val;
+      },
       toggleSelection(rows) {
         if (rows) {
           rows.forEach(row => {
@@ -301,6 +226,9 @@
       },
       handleClick(row) {
         console.log(row);
+      },
+      recordDetail() {
+
       }
     }
   }

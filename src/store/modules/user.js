@@ -6,7 +6,8 @@ const user = {
   },
   state: {
     username: "",
-    user_id:""
+    user_id:"",
+    nickname:""
   },
   mutations: {
     // 保存用户登录信息
@@ -17,6 +18,10 @@ const user = {
     setUsername (state, username) {
       state.username = username;
       localStorage.setItem('username', username);
+    },
+    setNickname (state, nickname) {
+      state.nickname = nickname;
+      localStorage.setItem('nickname', nickname);
     },
   }
 }
