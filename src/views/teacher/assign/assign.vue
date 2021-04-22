@@ -190,7 +190,7 @@ export default {
         if (response.data.code == 200) {
           let resData = response.data.data
           if (resData != null) {
-            this.assign = resData
+            this.assign = this.getrecord(resData) 
           }
           this.loading = false
         } else {
@@ -201,6 +201,20 @@ export default {
           });
         }
       })
+    },
+
+    getrecord(assign) {
+      var json = assign;
+      for (var i=0; i<json.length; i++) {
+        const upStr = json[i].test_info;
+        const upArr = upStr.split(",");
+        const up = upArr.length.toString();
+        const stuStr = json[i].students;
+        const stuArr = stuStr.split(",");
+        const stu = stuArr.length.toString();
+        json[i].record = up + '/' + stu;
+      }
+      return json;
     },
 
     //批量删除

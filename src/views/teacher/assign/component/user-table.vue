@@ -144,8 +144,8 @@ import { updateAssign,updateAssignTeacher,updateAssignStudent } from '../../../.
               arr.push(this.multipleSelection[i].username)
             }
             var assign = {
-              assign_id:4,
-              students: JSON.stringify(arr)
+              assign_id:1,
+              students: arr.join("")
             }
             updateAssignStudent(assign).then(response => {
 
@@ -157,18 +157,21 @@ import { updateAssign,updateAssignTeacher,updateAssignStudent } from '../../../.
           
         }
         if (identity == 'teacher') {
-          var info = {};
           var arr = [];
-          info['username'] = localStorage.getItem('username');
-          info['user_id'] = localStorage.getItem('username');
-          info['nickname'] = localStorage.getItem('nickname');
-          arr.push(info);
+          var username = localStorage.getItem('username');
+          // info['user_id'] = localStorage.getItem('username');
+          // info['nickname'] = localStorage.getItem('nickname');
+          // arr.push(info);
           if (this.multipleSelection.length >= 1) {
             for (var i=0; i<this.multipleSelection.length; i++) {
-              arr.push(this.multipleSelection[i].username)
+              let str = this.multipleSelection[i].username
+              if (str == username ){
+                continue;
+              }
+              arr.push()
             }
             var assign = {
-              assign_id:4,
+              assign_id:1,
               teachers: JSON.stringify(arr)
             }
             updateAssignTeacher(assign).then(response => {
