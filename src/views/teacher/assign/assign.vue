@@ -84,7 +84,7 @@
           label="操作"
           width="150">
           <template slot-scope="scope">
-            <el-button @click="dialogTableVisible = true" type="text" size="small">提交记录</el-button>
+            <el-button @click="getRecordAssign(scope.row.assign_id)" type="text" size="small">提交记录</el-button>
             <el-button @click="handleEdit(scope.row)" type="text" size="small">作业详情</el-button>
           </template>
         </el-table-column>
@@ -108,14 +108,16 @@
 
     <!----查看提交记录弹框----->
     <el-dialog title="提交记录" :visible.sync="dialogTableVisible">
-      <el-table :data="gridData">
-        <el-table-column property="date" label="提交时间" width="150"></el-table-column>
-        <el-table-column property="name" label="提交者" width="150"></el-table-column>
-        <el-table-column property="info" label="测试结果" width="150"></el-table-column>
-        <el-table-column property="score" label="得分" width="100"></el-table-column>
-        <el-table-column fixed="right" label="操作" width="100">
-            <el-button @click="recordDetail()" type="text" size="small">更改评分</el-button>
-        </el-table-column>
+      <el-table ref="table" :data="records">
+          <el-table-column prop="date" label="提交时间" width="150"></el-table-column>
+          <el-table-column prop="nickname" label="提交者" width="150"></el-table-column>
+          <el-table-column prop="info" label="测试结果" width="150"></el-table-column>
+          <el-table-column prop="score" label="得分" width="100"></el-table-column>
+          <el-table-column fixed="right" label="操作" width="100">
+            <template slot-scope="scope">
+              <el-button @click="recordDetail(scope.row.assign_id,scope.row.username)" type="text" size="small">更改评分</el-button>
+            </template>
+          </el-table-column>
       </el-table>
     </el-dialog>
 
@@ -136,6 +138,7 @@
 
 <script>
 import { getAssignT,deleteAssign } from '@/api/assign';
+import { getAssignRecord } from '@/api/record';
 import editForm from './component/edit-form.vue';
 import AddForm from './component/add-form.vue';
 import UserTable from './component/user-table.vue';
@@ -147,6 +150,7 @@ export default {
 
       /* 表格数据 */
       assign: [{}],
+      records: [],
       loading: true,
       currentPage: 1,
       pageSize: 10,
@@ -202,13 +206,15 @@ export default {
         }
       })
     },
-
     getrecord(assign) {
       var json = assign;
       for (var i=0; i<json.length; i++) {
         const upStr = json[i].test_info;
-        const upArr = upStr.split(",");
-        const up = upArr.length.toString();
+        var up = "0";
+        if (upStr != null && upStr != "") {
+          const upArr = upStr.split(",");
+          up = upArr.length.toString();
+        }
         const stuStr = json[i].students;
         const stuArr = stuStr.split(",");
         const stu = stuArr.length.toString();
@@ -292,6 +298,26 @@ export default {
       this.dialogUserVisible = true;
     },
 
+    //提交记录
+    getRecordAssign(assign_id){
+      this.dialogTableVisible = true
+      getAssignRecord(assign_id).then(response => {
+        if (response.data.code == 200) {
+          this.records = response.data.data
+        }
+      })
+    },
+    //更改评分
+    recordDetail(assign_id,username) {
+      this.$router.push({
+        path:'/teacher/score',
+        query: {
+          assign_id: assign_id,
+          username: username
+        }
+      }
+      )
+    },
 
     //查询题目(重置)
     resetQueryList() {

@@ -1,13 +1,13 @@
 <template>
   <div>
-    <el-row class="top-label">
+    <!-- <el-row class="top-label">
       <label class="title-label">当前总得分为 </label>
       <label class="score-label">100</label>
       <label class="title-label"> 分， </label>
       <label class="title-label">当前排名第 </label>
       <label class="rank-label">1</label>
       <label class="title-label"> 位</label>
-    </el-row>
+    </el-row> -->
     <el-card style="margin-top:12px">
       <el-table
         ref="multipleTable"
@@ -64,21 +64,7 @@
     data() {
       return {
         /* 表格数据 */
-        assign: [{
-          date_end: '2016-05-03',
-          title: '数组排序',
-          score: 85
-        },
-        {
-          date_end: '2016-05-03',
-          title: '数组排序',
-          score: 85
-        },
-        {
-          date_end: '2016-05-03',
-          title: '数组排序',
-          score: 85
-        }],
+        assign: [],
         currentPage: 1,
         pageSize: 10,
         loading: true,

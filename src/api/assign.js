@@ -18,7 +18,7 @@ export function getAssignS(username) {
     method:'get',
     params: {
       'username': username,
-      'title': ""
+      'title': ''
     }
   })
 }
@@ -85,6 +85,23 @@ export function deleteAssign(assign_id) {
   })
 }
 
-
-
 //上交作业-学生权限
+export function upload(file) {
+  return request({
+    url:'/file/upload',
+    method:'post',
+    data: file,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
+
+//更新提交记录-报告
+export function updateReport(record) {
+  return request({
+    url:'/record/report',
+    method:'post',
+    data: record
+  })
+}

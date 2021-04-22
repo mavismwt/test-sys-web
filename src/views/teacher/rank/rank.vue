@@ -97,7 +97,7 @@
           label="操作"
           width="150">
           <template slot-scope="scope">
-            <el-button @click="getRecord(scope.row.user_id)" type="text" size="small">提交记录</el-button>
+            <el-button @click="getUserRecords(scope.row.username)" type="text" size="small">提交记录</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -119,13 +119,15 @@
       </div> -->
     </el-card>
     <el-dialog title="得分记录" :visible.sync="dialogTableVisible">
-      <el-table :data="gridData">
+      <el-table :data="records">
         <el-table-column property="date" label="提交时间" width="150"></el-table-column>
         <el-table-column property="name" label="题目" width="150"></el-table-column>
         <el-table-column property="info" label="测试结果" width="150"></el-table-column>
         <el-table-column property="score" label="得分" width="100"></el-table-column>
         <el-table-column fixed="right" label="操作" width="100">
-            <el-button @click="recordDetail()" type="text" size="small">更改评分</el-button>
+            <template slot-scope="scope">
+              <el-button @click="recordDetail(scope.row.assign_id,scope.row.username)" type="text" size="small">更改评分</el-button>
+            </template>
         </el-table-column>
       </el-table>
     </el-dialog>
@@ -134,11 +136,13 @@
 
 <script>
 import { getUserQuery } from '@/api/login';
+import { getUserRecord } from '@/api/record';
   export default {
     data() {
       return {
 
         students: [],
+        records: [],
         collection:"",
         loading: false,
         
@@ -202,6 +206,28 @@ import { getUserQuery } from '@/api/login';
         this.collection = "",
         this.students = []
       },
+
+    //提交记录
+    getUserRecords(username){
+      this.dialogTableVisible = true
+      getUserRecord(username).then(response => {
+        if (response.data.code == 200) {
+          this.records = response.data.data
+        }
+      })
+    },
+    //更改评分
+    recordDetail(assign_id,username) {
+      this.$router.push({
+        path:'/teacher/score',
+        query: {
+          assign_id: assign_id,
+          username: username
+        }
+      }
+      )
+    },
+
       //选择一页显示多少行
       handleSizeChange(val) {
           console.log(`每页 ${val} 条`);
@@ -228,14 +254,6 @@ import { getUserQuery } from '@/api/login';
         this.multipleSelection = val;
       },
       
-
-      getRecord(user_id) {
-
-      },
-
-      recordDetail(user_id,) {
-
-      }
     }
   }
 </script>
