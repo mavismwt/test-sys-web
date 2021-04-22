@@ -68,31 +68,7 @@
             show-word-limit>
           </el-input>
         </el-form-item>
-        <!-- <el-form-item label="源码文件" :label-width="formLabelWidth">
-          <el-input v-model="file_source"
-            type="file"
-            accept="image/png, image/jpeg">
-          </el-input>
-        </el-form-item>
-        <el-form-item label="报告文件" :label-width="formLabelWidth">
-          <el-input v-model="form.file_report"
-            type="file"
-            accept="image/png, image/jpeg">
-          </el-input>
-        </el-form-item> -->
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="得分" :label-width="formLabelWidth">
-              <el-input v-model="formData.score"
-                type="number"
-                autocomplete="off"
-                placeholder="0~100"
-                min="10" 
-                max="100"
-                disabled>
-              </el-input>
-            </el-form-item>
-          </el-col>
           <el-col :span="12">
             <el-form-item label="权重" :label-width="formLabelWidth">
               <el-input v-model="formData.weight"
