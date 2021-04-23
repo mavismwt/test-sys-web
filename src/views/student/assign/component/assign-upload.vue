@@ -59,6 +59,7 @@ export default {
         if (response.data.code == 200) {
           let path = response.data.data
           this.record.file_report = path
+          this.record.date = '2020-04-23'
           updateReport(this.record).then(res => {
             if (response.data.code == 200) {
               this.reportLoading = false;

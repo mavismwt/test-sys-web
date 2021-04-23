@@ -16,8 +16,8 @@
         style="width: 100%"
         v-loading="loading">
         <el-table-column
-          prop="date_end"
-          label="截止日期"
+          prop="date"
+          label="提交日期"
           sortable
           width="150">
         </el-table-column>
@@ -58,7 +58,7 @@
 </template>
 
 <script>
-  import { getUser } from '@/api/login'
+  import { getUserRecord } from '@/api/record'
 
   export default {
     data() {
@@ -76,14 +76,10 @@
     },
     methods: {
       getAssign() {
-        const user_id = localStorage.getItem('user_id');
-        getUser(user_id).then(response => {
+        const username = localStorage.getItem('username');
+        getUserRecord(username).then(response => {
           if (response.data.code == 200) {
-            let resData = response.data.data
-            if (resData.assign != null) {
-              let resJSON = JSON.parse(resData.assign);
-              this.assign = resJSON;
-            }
+            this.assign = response.data.data
             this.loading = false
           } else {
             this.loading = false

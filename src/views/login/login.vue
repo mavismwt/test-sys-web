@@ -19,7 +19,7 @@
       :before-close="handleClose">
       <span>请输入账号和密码</span>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="dialogVisible = false" :loading="loginLoading">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -37,6 +37,7 @@ export default {
         username: 'T201713327',
         password: '123'
       },
+      loginLoading: false,
 
       // 表单验证，需要在 el-form-item 元素中增加 prop 属性
       rules: {
@@ -57,9 +58,11 @@ export default {
       // 为表单绑定验证功能
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
+          this.loginLoading = true;
           login(this.loginForm.username,this.loginForm.password).then(response => {
             let code = response.data.code;
             if (code == 200) {
+              this.loginLoading = false;
               this.$router.push({
                 path: "/"+`${response.data.data.identity}`,
                 query: {user_id: response.data.data.user_id }
@@ -69,6 +72,7 @@ export default {
               this.$store.commit('setUserId',response.data.data.user_id);
               this.$store.commit('setNickname',response.data.data.nickname);
             }else {
+              this.loginLoading = false;
               this.$message({
                 type: 'error',
                 message: `${response.data.code} ` + `${response.data.message}`
@@ -76,6 +80,7 @@ export default {
             }
           })
         } else {
+          this.loginLoading = false;
           this.dialogVisible = true;
           return false;
         }

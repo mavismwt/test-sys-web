@@ -11,7 +11,7 @@
             <el-divider style="margin-top:-8px;"></el-divider>
             <el-row>
               <el-col span="3"><doc-cell v-if="file_source" type="source" :title="file_source"></doc-cell></el-col>
-              <el-col span="3"><doc-cell v-if="file_source" type="report" :title="file_report"></doc-cell></el-col>
+              <el-col span="3"><doc-cell v-if="file_report" type="report" :title="file_report"></doc-cell></el-col>
             </el-row>
             <el-row>
                 <el-button type="primary" @click="dialogUploadVisible=true">上传文件</el-button>
@@ -52,6 +52,7 @@ export default {
   },
   mounted() {
     this.getAssignDetail();
+    this.getSingleRecord();
   },
   methods: {
     getAssignDetail() {
@@ -70,7 +71,14 @@ export default {
       getSingleRecord(this.username,this.assign_id).then(response => {
         if (response.data.code == 200) {
           let resData = response.data.data
-          this.file_report = resData.file_report
+          let report_path = resData.file_report
+          let report_arr = report_path.split("/")
+          let report_name = report_arr[report_arr.length-1] 
+          this.file_report = report_name
+
+          let source_path = resData.file_source
+          let source_arr = source_path.split("/")
+          let source_name = source_arr[source_arr.length-1] 
           this.file_source = resData.file_source
           //////
         } else {

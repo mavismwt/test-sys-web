@@ -121,7 +121,7 @@
     <el-dialog title="得分记录" :visible.sync="dialogTableVisible">
       <el-table :data="records">
         <el-table-column property="date" label="提交时间" width="150"></el-table-column>
-        <el-table-column property="name" label="题目" width="150"></el-table-column>
+        <el-table-column property="title" label="题目" width="150"></el-table-column>
         <el-table-column property="info" label="测试结果" width="150"></el-table-column>
         <el-table-column property="score" label="得分" width="100"></el-table-column>
         <el-table-column fixed="right" label="操作" width="100">

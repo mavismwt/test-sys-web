@@ -8,7 +8,7 @@
         <el-col :span="6"> 
           <el-button-group>
             <el-button
-              @click="getAssign()"
+              @click="getAssign"
               icon="el-icon-search"
               type="primary"
             >查询</el-button>
@@ -194,7 +194,7 @@ export default {
         if (response.data.code == 200) {
           let resData = response.data.data
           if (resData != null) {
-            this.assign = this.getrecord(resData) 
+            this.assign = resData
           }
           this.loading = false
         } else {
