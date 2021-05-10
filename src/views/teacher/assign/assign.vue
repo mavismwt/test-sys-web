@@ -69,15 +69,21 @@
         </el-table-column>
         <el-table-column
           prop="title"
-          label="标题"
+          label="测试日期"
           sortable
-          show-overflow-tooltip>
+          width="200">
+        </el-table-column>
+        <el-table-column
+          prop="title"
+          label="测试日期"
+          sortable
+          width="200">
         </el-table-column>
         <el-table-column
           prop="record"
-          label="提交人数"
+          label="题目名称"
           sortable
-          width="150px">
+          show-overflow-tooltip>
         </el-table-column>
         <el-table-column
           fixed="right"

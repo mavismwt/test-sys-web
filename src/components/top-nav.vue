@@ -1,22 +1,22 @@
 <template>
   <div class="header">
-      <div class="title">C语言在线作业评测系统</div>
-      <div class="header-right">
-          <div class="header-user-con">
-              <!-- 用户头像，根据需要自行修改图片路径 -->
-              <!-- <div class="user-avator"><img src="../../assets/logo.png" /></div> -->
-              <!-- 用户名下拉菜单 -->
-              <el-dropdown class="user-name" trigger="click" @command="handleCommand">
-                  <span class="el-dropdown-link">
-                      {{ username }}
-                      <i class="el-icon-caret-bottom"></i>
-                  </span>
-                  <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item disabled>修改密码</el-dropdown-item>
-                      <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
-                  </el-dropdown-menu>
-              </el-dropdown>
-          </div>
+    <div class="title">C语言在线作业评测系统</div>
+    <div class="header-right">
+        <div class="header-user-con">
+            <!-- 用户头像，根据需要自行修改图片路径 -->
+            <!-- <div class="user-avator"><img src="../../assets/logo.png" /></div> -->
+            <!-- 用户名下拉菜单 -->
+            <el-dropdown class="user-name" trigger="click" @command="handleCommand">
+                <span class="el-dropdown-link">
+                    {{ username }}
+                    <i class="el-icon-caret-bottom"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item disabled>修改密码</el-dropdown-item>
+                    <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+        </div>
       </div>
   </div>
 </template>

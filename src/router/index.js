@@ -10,6 +10,10 @@ Vue.use(Router)
 let router = new Router({
   routes: [
     {
+      path: '',
+      redirect: '/login',
+    },
+    {
       path: '/login',
       name: 'Login',
       component: Login
@@ -31,10 +35,10 @@ let router = new Router({
           path:'/teacher/rank',
           component:() => import('../views/teacher/rank/rank.vue')
         },
-        {
-          path:'/teacher/static',
-          component:() => import('../views/teacher/static/static.vue')
-        },
+        // {
+        //   path:'/teacher/static',
+        //   component:() => import('../views/teacher/static/static.vue')
+        // },
         {
           path:'/teacher/score',
           component:() => import('../views/teacher/record/single-record.vue')

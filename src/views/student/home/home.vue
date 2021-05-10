@@ -91,7 +91,7 @@ export default {
 .main {
   width: 100%;
   height: 93vh;
-  background-color: rgba(244,246,248, 255);
+  background-color: rgba(244,246,248,255);
 }
 
 </style>
