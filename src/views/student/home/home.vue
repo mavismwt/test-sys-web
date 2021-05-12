@@ -42,12 +42,12 @@ export default {
           title: "周测数据",
           subs: [
             {
-              index: "/student/data/ide",
-              title: "数据1",
+              index: "/student/data/web",
+              title: "网页改错情况"
             },
             {
-              index: "/student/data/web",
-              title: "数据2"
+              index: "/student/data/ide",
+              title: "编程测试情况",
             }
           ]
         }],

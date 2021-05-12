@@ -26,7 +26,8 @@
 </template>
 
 <script>
-import { upload,updateReport } from '@/api/assign'
+import { upload } from '@/api/file'
+import { updateReport } from '@/api/assign'
 
 export default {
   data() {
@@ -53,9 +54,10 @@ export default {
       let reportfile = this.$refs.reportfile;
       let files = reportfile.files;
       let file = files[0];
+      let studentId = localStorage.getItem('username');
       var formData = new FormData();
       formData.append("file", file);
-      upload(formData,this.record,"report").then(response => {
+      upload(formData,studentId).then(response => {
         if (response.data.code == 200) {
           let path = response.data.data
           this.record.file_report = path
@@ -65,6 +67,12 @@ export default {
               this.reportLoading = false;
               this.$message("上传报告成功");
             }
+          })
+        } else {
+          this.reportLoading = false;
+          this.$message({
+            type: 'danger',
+            msg:'上传失败，请稍后重试'
           })
         }
       })

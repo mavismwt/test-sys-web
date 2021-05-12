@@ -5,7 +5,7 @@
         <el-page-header @back="goBack" :content="username">
         </el-page-header>
         <info-area :assign="assign"></info-area>
-        <doc-info></doc-info>
+        <doc-info :record="record"></doc-info>
         <score-info :score="record.score" :weight="record.weight"></score-info>
       </el-col>
     </el-container>
@@ -26,7 +26,7 @@ export default {
       assign_id: this.$route.query.assign_id,
       username: this.$route.query.username,
       assign: {},
-      record:{},
+      record: {},
       loading: true
     }
   },

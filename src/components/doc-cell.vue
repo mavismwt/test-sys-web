@@ -3,7 +3,7 @@
     <!-- <el-card > -->
       <el-col class="cell">
         <el-row><img src="@/assets/icon/wenjianjia.png" alt="" width="80px" height="80px"></el-row>
-        <el-row><span style="font-size:14px;">{{title}}</span></el-row>
+        <el-row><span class="spanStyle" >{{title}}</span></el-row>
         <!-- <el-row><span style="font-size:12px">2020.3.20</span></el-row> -->
       </el-col>
     <!-- </el-card> -->
@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     
-  }
+  },
 }
 </script>
 
@@ -31,5 +31,18 @@ export default {
   /* border: 1px solid #f0f0f0;
   border-radius: 2px; */
   /* box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1) */
+}
+.spanStyle {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 90px;
+  /* display: inline-block;
+  white-space: normal;
+  width: 100px;
+  overflow: hidden; 
+  text-overflow: ellipsis; */
+  font-size: 14px;
 }
 </style>

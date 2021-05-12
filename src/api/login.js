@@ -35,3 +35,25 @@ export function getUserQuery(collection,nickname,identity) {
     }
   })
 }
+
+//导出全部用户信息
+export function exportExcelAll(collection) {
+  return request({
+    url:'/exportExcelAll',
+    method:'post',
+    responseType: 'blob',
+    data: {
+      'collection': collection
+    }
+  })
+}
+
+//批量导出用户信息
+export function exportExcel(id) {
+  return request({
+    url:'/export',
+    method:'post',
+    responseType: 'blob',
+    data: id
+  })
+}

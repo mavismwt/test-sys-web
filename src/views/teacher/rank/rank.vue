@@ -135,7 +135,7 @@
 </template>
 
 <script>
-import { getUserQuery } from '@/api/login';
+import { getUserQuery,exportExcelAll,exportExcel } from '@/api/login';
 import { getUserRecord } from '@/api/record';
   export default {
     data() {
@@ -163,7 +163,11 @@ import { getUserRecord } from '@/api/record';
         queryLoading: false,
         currentPage: 1,
         pageSize: 10,
-        multipleSelection: []
+        multipleSelection: [],
+
+        /* 导出 */
+        allExportBtnLoading: false,
+        batchExportBtnLoading: false,
       }
       
     },
@@ -207,26 +211,26 @@ import { getUserRecord } from '@/api/record';
         this.students = []
       },
 
-    //提交记录
-    getUserRecords(username){
-      this.dialogTableVisible = true
-      getUserRecord(username).then(response => {
-        if (response.data.code == 200) {
-          this.records = response.data.data
+      //提交记录
+      getUserRecords(username){
+        this.dialogTableVisible = true
+        getUserRecord(username).then(response => {
+          if (response.data.code == 200) {
+            this.records = response.data.data
+          }
+        })
+      },
+      //更改评分
+      recordDetail(assign_id,username) {
+        this.$router.push({
+          path:'/teacher/score',
+          query: {
+            assign_id: assign_id,
+            username: username
+          }
         }
-      })
-    },
-    //更改评分
-    recordDetail(assign_id,username) {
-      this.$router.push({
-        path:'/teacher/score',
-        query: {
-          assign_id: assign_id,
-          username: username
-        }
-      }
-      )
-    },
+        )
+      },
 
       //选择一页显示多少行
       handleSizeChange(val) {
@@ -253,7 +257,61 @@ import { getUserRecord } from '@/api/record';
       handleSelectionChange(val) {
         this.multipleSelection = val;
       },
+
+
+      //批量导出
+      batchExport() {
+        this.batchExportBtnLoading = true;
+        var arr = [];
+        var user_id = "";
+        for (var i = 0; i<this.multipleSelection.length; i ++) {
+          arr.push(this.multipleSelection[i].user_id);
+        }
+        exportExcel(arr).then(response => {
+          if (response.data != null) {
+            this.downloadFile(response.data,this.collection+'批量')
+            this.$message("导出成功")
+          } else {
+            this.$message({
+              type: 'error',
+              message:  "未查询到相关数据"
+            })
+          }
+          this.batchExportBtnLoading = false
+        })
+      },
       
+
+      //导出全部
+      exportAll() {
+        this.allExportBtnLoading = true
+        exportExcelAll(this.collection).then(response => {
+          if (response.data != null) {
+            this.downloadFile(response.data,this.collection)
+            this.$message("导出成功")
+          } else {
+            this.$message({
+              type: 'error',
+              message:  "未查询到相关数据"
+            })
+          }
+          this.allExportBtnLoading = false
+        })
+      },
+      downloadFile(data,title) {
+        if (!data) {
+          return
+        }
+        const link = document.createElement('a');
+        let blob = new Blob([data], {type: 'application/vnd.ms-excel'});
+        link.style.display = 'none';
+        link.href = URL.createObjectURL(blob);
+
+        link.setAttribute('download', title + '成绩表' + '.xls');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      },
     }
   }
 </script>
