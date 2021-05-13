@@ -10,7 +10,7 @@
         <el-col :span="4">
           <!-- <p class="info-left">发布者：{{getTeacher(assign.teachers)}}}</p>  -->
         </el-col>
-        <el-col :span="6">
+        <el-col :span="12">
           <p class="info-right">开放时间：{{assign.date_start}} - {{assign.date_end}}</p>
         </el-col>
       </el-row>

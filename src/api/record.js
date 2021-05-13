@@ -33,3 +33,30 @@ export function getUserRecord(username) {
     }
   })
 }
+
+//更新提交记录-报告
+export function updateReport(record) {
+  return request({
+    url:'/record/report',
+    method:'post',
+    data: record
+  })
+}
+
+//更新提交记录-源码
+export function updateSource(record) {
+  return request({
+    url:'/record/source',
+    method:'post',
+    data: record
+  })
+}
+
+//更新提交记录-成绩
+export function updateScore(record) {
+  return request({
+    url:'/record/score',
+    method:'post',
+    data: record
+  })
+}

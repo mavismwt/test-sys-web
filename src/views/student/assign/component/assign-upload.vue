@@ -27,7 +27,7 @@
 
 <script>
 import { upload } from '@/api/file'
-import { updateReport } from '@/api/assign'
+import { updateReport,updateSource } from '@/api/record'
 
 export default {
   data() {
@@ -46,7 +46,31 @@ export default {
   methods: {
     uploadSource() {
       this.sourceLoading = true
-
+      let sourcefile = this.$refs.sourcefile;
+      let files = sourcefile.files;
+      let file = files[0];
+      let studentId = localStorage.getItem('username');
+      var formData = new FormData();
+      formData.append("file", file);
+      upload(formData,studentId).then(response => {
+        if (response.data.code == 200) {
+          let path = response.data.data
+          this.record.file_source = path
+          this.record.date = this.getDate()
+          updateSource(this.record).then(res => {
+            if (response.data.code == 200) {
+              this.sourceLoading = false;
+              this.$message("上传源码成功");
+            }
+          })
+        } else {
+          this.sourceLoading = false;
+          this.$message({
+            type: 'danger',
+            msg:'上传失败，请稍后重试'
+          })
+        }
+      })
     },
     
     uploadReport() {
@@ -61,7 +85,7 @@ export default {
         if (response.data.code == 200) {
           let path = response.data.data
           this.record.file_report = path
-          this.record.date = '2020-04-23'
+          this.record.date = this.getDate()
           updateReport(this.record).then(res => {
             if (response.data.code == 200) {
               this.reportLoading = false;
@@ -76,7 +100,14 @@ export default {
           })
         }
       })
-    }
+    },
+    getDate() {
+      var data = new Date();
+      var month =data.getMonth() < 9 ? "0" + (data.getMonth() + 1) : data.getMonth() + 1;
+      var date = data.getDate() <= 9 ? "0" + data.getDate() : data.getDate();
+      return data.getFullYear() + "-" + month + "-" + date;
+    },
+
   }
 
 }

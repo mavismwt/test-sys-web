@@ -85,11 +85,4 @@ export function deleteAssign(assign_id) {
   })
 }
 
-//更新提交记录-报告
-export function updateReport(record) {
-  return request({
-    url:'/record/report',
-    method:'post',
-    data: record
-  })
-}
+

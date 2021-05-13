@@ -16,13 +16,13 @@ export function upload(file,studentId) {
 }
 
 //下载作业-教师权限
-export function download(path) {
+export function download(path,name) {
   return request({
     url:'/download',
     method:'post',
     params:{
       filePath: path,
-      fileName: "本科17级电信第二党支部-同上四史思政大课心得感悟.docx"
+      fileName: name,
     },
     responseType: 'blob'
   })

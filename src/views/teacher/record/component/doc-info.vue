@@ -9,7 +9,8 @@
       </el-row>
       <el-row>
           <el-button type="default">查看文件</el-button>
-          <el-button type="primary" @click="downloadFile(record.report_path)">下载文件</el-button>
+          <el-button type="primary" @click="downloadFile(record.file_report)">下载文件</el-button>
+          <!-- <div name="downloadfile" @click="downloadExcel">下载</div> -->
       </el-row>
     </el-card>
   </div>
@@ -26,7 +27,6 @@ export default {
     return {
       file_report:"",
       file_source:"",
-
     }
   },
   methods: {
@@ -45,10 +45,9 @@ export default {
       } else {
         return null
       }
-
     },
     downloadFile(path) {
-      download(path).then(response => {
+      download(path,this.file_report).then(response => {
         if (response.data != null) {
           this.down(response.data,this.file_report)
         }
@@ -62,12 +61,16 @@ export default {
         let link = document.createElement('a')
         link.style.display = 'none'
         link.href = url
-        // 获取文件名
-        // download 属性定义了下载链接的地址而不是跳转路径
         link.setAttribute('download', filename)
         document.body.appendChild(link)
         link.click()
-    }
+    },
+    // downloadExcel() {
+    //     let a = document.createElement('a')
+    //     a.href ="localhost:8088/download?fileName=本科17级电信第二党支部-同上四史思政大课心得感悟.docx"
+    //     a.target="_blank"
+    //     a.click();
+    // } 
     
   }
 }

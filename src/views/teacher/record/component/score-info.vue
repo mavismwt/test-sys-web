@@ -9,7 +9,7 @@
               <label class="score-label">{{score}}</label>
             </el-col>
             <el-col :span="4">
-              <el-button type="danger">更改评分</el-button>
+              <el-button type="danger" @click="editScore()">更改评分</el-button>
               <label class="detail">本题得分权重为：{{weight}}</label>
             </el-col>
           </el-row>
@@ -28,6 +28,9 @@ export default {
     }
   },
   methods: {
+    editScore() {
+      this.$emit('edit')
+    }
     
   }
 }
