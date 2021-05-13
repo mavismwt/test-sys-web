@@ -26,7 +26,7 @@
                 v-model="form.date_start"
                 type="date"
                 placeholder="选择日期"
-                format="yyyy 年 MM 月 dd 日"
+                format="yyyy-MM-dd"
                 disabled>
               </el-date-picker>
             </el-form-item>
@@ -37,7 +37,7 @@
                 v-model="form.date_end"
                 type="date"
                 placeholder="选择日期"
-                format="yyyy 年 MM 月 dd 日">
+                format="yyyy-MM-dd">
               </el-date-picker>
             </el-form-item></el-col>
         </el-row>

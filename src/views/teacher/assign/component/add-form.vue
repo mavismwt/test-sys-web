@@ -43,7 +43,7 @@
                 v-model="formData.date_start"
                 type="date"
                 placeholder="选择日期"
-                format="yyyy 年 MM 月 dd 日"
+                format="yyyy-MM-dd"
                 disabled>
               </el-date-picker>
             </el-form-item>
@@ -54,7 +54,7 @@
                 v-model="formData.date_end"
                 type="date"
                 placeholder="选择日期"
-                format="yyyy 年 MM 月 dd 日">
+                format="yyyy-MM-dd">
               </el-date-picker>
             </el-form-item></el-col>
         </el-row>
@@ -110,15 +110,26 @@ export default {
           {required: true, trigger: 'blur'}
         ]
       },
+      formData:{
+      },
       formLabelWidth: '120px',
       loading: false
     }
   },
   mounted() {
-
   },
   
   methods: {
+    getDate(data) {
+      if (data == null) {
+        data = new Date();
+      } else {
+        data = new Date(Date.parse(data));
+      }
+      var month =data.getMonth() < 9 ? "0" + (data.getMonth() + 1) : data.getMonth() + 1;
+      var date = data.getDate() <= 9 ? "0" + data.getDate() : data.getDate();
+      return data.getFullYear() + "-" + month + "-" + date;
+    },
     onCancel() {
       this.$emit('cancelAdd')
     },
@@ -126,6 +137,8 @@ export default {
       this.$refs.formData.validate((valid) => {
         if (valid) {
           this.loading = true
+          this.formData.date_start = this.getDate(this.formData.date_start)
+          this.formData.date_end = this.getDate(this.formData.date_end)
           addAssign(this.formData).then(response => {
             if (response.data.code == 200) {
               this.loading = false

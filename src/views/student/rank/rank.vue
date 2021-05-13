@@ -1,13 +1,13 @@
 <template>
   <div>
-    <!-- <el-row class="top-label">
+    <el-row class="top-label">
       <label class="title-label">当前总得分为 </label>
-      <label class="score-label">100</label>
-      <label class="title-label"> 分， </label>
-      <label class="title-label">当前排名第 </label>
+      <label class="score-label">{{score}}</label>
+      <label class="title-label"> 分 </label>
+      <!-- <label class="title-label">当前排名第 </label>
       <label class="rank-label">1</label>
-      <label class="title-label"> 位</label>
-    </el-row> -->
+      <label class="title-label"> 位</label> -->
+    </el-row>
     <el-card style="margin-top:12px">
       <el-table
         ref="multipleTable"
@@ -59,6 +59,7 @@
 
 <script>
   import { getUserRecord } from '@/api/record'
+  import { getUser } from '@/api/login'
 
   export default {
     data() {
@@ -68,13 +69,24 @@
         currentPage: 1,
         pageSize: 10,
         loading: true,
+
+        score:0,
       }
       
     },
     mounted() {
       this.getAssign()
+      this.getUserInfo()
     },
     methods: {
+      getUserInfo() {
+        let user_id = localStorage.getItem('user_id');
+        getUser(user_id).then(response => {
+          if (response.data.code == 200) {
+            this.score = response.data.data.score
+          }
+        })
+      },
       getAssign() {
         const username = localStorage.getItem('username');
         getUserRecord(username).then(response => {

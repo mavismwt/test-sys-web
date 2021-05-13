@@ -74,7 +74,7 @@
           width="200">
         </el-table-column>
         <el-table-column
-          prop="title"
+          prop="date_end"
           label="测试日期"
           sortable
           width="200">

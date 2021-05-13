@@ -36,7 +36,7 @@ export default {
         assign_id:1,
         username:"U201713327",
         title:"二叉树",
-        date:"2020-01-01 00:00",
+        date:"2020-01-01",
         weight:100
       },
       reportLoading:false,

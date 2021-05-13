@@ -11,7 +11,7 @@
           <!-- <p class="info-left">发布者：{{getTeacher(assign.teachers)}}}</p>  -->
         </el-col>
         <el-col :span="12">
-          <p class="info-right">开放时间：{{assign.date_start}} - {{assign.date_end}}</p>
+          <p class="info-right">开放时间：{{assign.date_start}} 00:00 - {{assign.date_end}} 23:59</p>
         </el-col>
       </el-row>
       <el-row>

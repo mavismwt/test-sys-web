@@ -5,7 +5,7 @@
         <el-page-header @back="goBack" :content="assign.title">
         </el-page-header>
         <info-area :assign="assign"></info-area>
-        <div class="info-area">
+        <div class="info-area" >
           <el-card style="margin-top:8px;">
             <span class="top-label">文件列表>></span>
             <el-divider style="margin-top:-8px;"></el-divider>
@@ -13,7 +13,7 @@
               <el-col span="3"><doc-cell v-if="file_source" type="source" :title="getName(file_source,1) "></doc-cell></el-col>
               <el-col span="3"><doc-cell v-if="file_report" type="report" :title="getName(file_report,0)"></doc-cell></el-col>
             </el-row>
-            <el-row>
+            <el-row v-if="isDue(assign.date_end)">
                 <el-button type="primary" @click="dialogUploadVisible=true">上传文件</el-button>
             </el-row>
             <el-row style="font-size:12px;color:#c0c0c0;">支持上传一份源码和一份报告，上传文件会自动覆盖；最大上传50MB文件</el-row>
@@ -103,6 +103,14 @@ export default {
         return this.file_source
       } else {
         return null
+      }
+    },
+    isDue(DateString) {
+      const date = Date.parse(DateString)
+      if (date > new Date) {
+        return true
+      } else {
+        return false
       }
     },
     goBack() {
