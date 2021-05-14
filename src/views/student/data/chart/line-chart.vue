@@ -17,11 +17,14 @@
 			drawLine(id) {
 				this.charts = echarts.init(document.getElementById(id))
 				this.charts.setOption({
+          title : {
+            text: '学生答题表现',
+          },
 					tooltip: {
 						trigger: 'axis'
 					},
 					legend: {
-						data: ['近七日收益','收益']
+						data: ['平均命中错误耗时','平均解决错误耗时']
 					},
 					grid: {
 						left: '3%',
@@ -38,11 +41,12 @@
 					xAxis: {
 						type: 'category',
 						boundaryGap: false,
-					data: ["1","2","3","4","5"]
+					  data: ["1","2","3","4","5"]
 					
 					},
 					yAxis: [
             {
+              name: '测试表现',
               type: 'value'
             },
             {
@@ -52,16 +56,18 @@
           ],
 
 					series: [{
-						name: '近七日收益',
+						name: '平均命中错误耗时',
 						type: 'line',
 						stack: '总量',
-						data: this.opinionData
+            smooth: true,
+						data: [7,23,97,134,340]
 					},
           {
-						name: '收益',
+						name: '平均解决错误耗时',
 						type: 'line',
 						stack: '总量',
-						data: this.opinion
+            smooth: true,
+						data: [524,136,1147,243,546]
 					}]
 				})
 			}

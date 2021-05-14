@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     getName(str,type) {
-      if (str == null && str == "") {
+      if (str == null || str == "") {
         return null
       }
       

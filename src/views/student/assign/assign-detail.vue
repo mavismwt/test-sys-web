@@ -10,11 +10,11 @@
             <span class="top-label">文件列表>></span>
             <el-divider style="margin-top:-8px;"></el-divider>
             <el-row>
-              <el-col span="3"><doc-cell v-if="file_source" type="source" :title="getName(file_source,1) "></doc-cell></el-col>
+              <el-col span="3"><doc-cell v-if="file_source" type="source" :title="getName(file_source,1)"></doc-cell></el-col>
               <el-col span="3"><doc-cell v-if="file_report" type="report" :title="getName(file_report,0)"></doc-cell></el-col>
             </el-row>
             <el-row v-if="isDue(assign.date_end)">
-                <el-button type="primary" @click="dialogUploadVisible=true">上传文件</el-button>
+                <el-button type="primary" @click="upload()">上传文件</el-button>
             </el-row>
             <el-row style="font-size:12px;color:#c0c0c0;">支持上传一份源码和一份报告，上传文件会自动覆盖；最大上传50MB文件</el-row>
           </el-card>
@@ -33,7 +33,7 @@ import infoArea from '@/components/info-area.vue'
 import { getAssign } from '@/api/assign'
 import AssignUpload from './component/assign-upload'
 import DocCell from '../../../components/doc-cell.vue'
-import {getSingleRecord} from '@/api/record'
+import { getSingleRecord } from '@/api/record'
 
 export default {
   components: { infoArea, AssignUpload, DocCell },
@@ -71,14 +71,14 @@ export default {
       getSingleRecord(this.username,this.assign_id).then(response => {
         if (response.data.code == 200) {
           let resData = response.data.data
-          let report_path = resData.file_report
-          let report_arr = report_path.split("/")
-          let report_name = report_arr[report_arr.length-1] 
-          this.file_report = report_name
+          // let report_path = resData.file_report
+          // let report_arr = report_path.split("/")
+          // let report_name = report_arr[report_arr.length-1] 
+          this.file_report = resData.file_report
 
           let source_path = resData.file_source
-          let source_arr = source_path.split("/")
-          let source_name = source_arr[source_arr.length-1] 
+          // let source_arr = source_path.split("/")
+          // let source_name = source_arr[source_arr.length-1] 
           this.file_source = resData.file_source
           //////
         } else {
@@ -90,8 +90,13 @@ export default {
         }
       })
     },
+    upload() {
+      this.dialogUploadVisible=true;
+      this.$store.commit('setAssignId',this.assign.assign_id);
+      this.$store.commit('setTitle',this.assign.title);
+    },
     getName(str,type) {
-      if (str == null && str == "") {
+      if (str == null || str == "") {
         return null
       }
       let arr = str.split('/')

@@ -14,7 +14,14 @@
         <p>题目{{info.detail}}中，最纠结的考点是{{info.detail}}</p>
       </el-row>
       <el-row>
-        <line-bar-chart></line-bar-chart>
+        <div class="chart">
+          <radar-chart></radar-chart>
+        </div>
+      </el-row>
+      <el-row>
+        <div class="chart">
+          <line-chart></line-chart>
+        </div>
       </el-row>
     </el-card>
   </div>
@@ -24,9 +31,10 @@
 import LineBarChart from '../chart/line-bar-chart.vue'
 import lineChart from '../chart/line-chart.vue'
 import PieChart from '../chart/pie-chart.vue'
+import RadarChart from '../chart/radar-chart.vue'
 
 export default {
-  components: { lineChart, PieChart, LineBarChart },
+  components: { lineChart, PieChart, LineBarChart, RadarChart },
   props:[''],
   data() {
     return {
@@ -64,7 +72,12 @@ export default {
   margin: 10px;
   margin-left: 0px;
 }
-
+.chart {
+  display:inline-block;
+  margin:10px;
+  padding: 10px;
+  border: 1px solid #DCDFE6;
+}
 .detail {
   text-align: left;
   font-size: 14px;

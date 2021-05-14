@@ -69,7 +69,7 @@
         </el-table-column>
         <el-table-column
           prop="title"
-          label="测试日期"
+          label="题目名称"
           sortable
           width="200">
         </el-table-column>
@@ -77,14 +77,15 @@
           prop="date_end"
           label="测试日期"
           sortable
-          width="200">
-        </el-table-column>
-        <el-table-column
-          prop="record"
-          label="题目名称"
-          sortable
+          
           show-overflow-tooltip>
         </el-table-column>
+        <!-- <el-table-column
+          prop="record"
+          label="提交记录"
+          sortable
+          show-overflow-tooltip>
+        </el-table-column> -->
         <el-table-column
           fixed="right"
           label="操作"

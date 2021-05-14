@@ -18,8 +18,7 @@
 				this.charts = echarts.init(document.getElementById(id))
 				this.charts.setOption({
 					title : {
-            text: ' 雷达图demo',     //这里的参数是整个图标的标题 后面也可以加注释
-            subtext: '888'
+            text: '学生综合能力雷达图',
           },
           tooltip : {
             trigger: 'item',
@@ -34,37 +33,37 @@
           toolbox: {
             show : true,
             feature : {
-              mark : {show: true},
-              dataView : {show: true, readOnly: false},
-              restore : {show: true},
+              // mark : {show: true},
+              // dataView : {show: true, readOnly: false},
+              // restore : {show: true},
               saveAsImage : {show: true},
             }
           },
           polar : [
             {
               indicator : [
-                { text: '素质必修课 ', max: 5.0, color: 'red'},    //这里用于设置各轴的参数以及最大值
-                { text: '核心必修课 ', max: 5.0},
-                { text: '一般必修课 ', max: 5.0},
-                { text: '通识必修课', max: 5.0},
-                { text: '通识限选课', max: 5.0},
+                { text: '总耗时排名', max: 5.0},    //这里用于设置各轴的参数以及最大值
+                { text: '命中错误耗时', max: 5.0},
+                { text: '解决错误耗时', max: 5.0},
+                { text: '命中正确率', max: 5.0},
+                { text: '解决正确率', max: 5.0},
               ]
             }
           ],
           calculable : true,
           series : [
             {
-              name: '预算 vs 开销（Budget vs spending）',
+              name: '综合能力',
               type: 'radar',
               data : [
                 {
                   value : [3.5, 4.8, 3.2, 4.7, 4.5],
-                  name : 'A同学 '
+                  name : '张三 '
                 },
-                {
-                  value : [4.2, 4.1, 3.9, 3.7, 3.5 ],
-                  name : 'B同学 '
-                }
+                // {
+                //   value : [4.2, 4.1, 3.9, 3.7, 3.5 ],
+                //   name : 'B同学 '
+                // }
               ]
             }
           ]

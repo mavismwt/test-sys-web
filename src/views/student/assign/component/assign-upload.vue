@@ -34,9 +34,9 @@ export default {
     return {
       record: {
         assign_id:1,
-        username:"U201713327",
-        title:"二叉树",
-        date:"2020-01-01",
+        username:"",
+        title:"",
+        date:"",
         weight:100
       },
       reportLoading:false,
@@ -57,6 +57,10 @@ export default {
           let path = response.data.data
           this.record.file_source = path
           this.record.date = this.getDate()
+          this.record.assign_id = localStorage.getItem('assign_id')
+          this.record.title = localStorage.getItem('title')
+          this.record.username = studentId
+          this.record.nickname = localStorage.getItem('nickname')
           updateSource(this.record).then(res => {
             if (response.data.code == 200) {
               this.sourceLoading = false;
