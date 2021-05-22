@@ -39,6 +39,20 @@
     <el-card style="margin-top:12px">
       <el-row>
         <el-button
+          @click="dialogAddVisible = true"
+          style="margin-left:10px;float:left;"
+          size="small"
+          type="primary"
+        >新建数据</el-button>
+        <el-button
+          @click="dialogUploadVisible = true"
+          v-loading="deleteLoading"
+          style="margin-left:10px;float:left;"
+          size="small"
+          type="warning"
+        >导入数据</el-button>
+        
+        <el-button
           :loading="allExportBtnLoading"
           @click="exportAll"
           style="margin-right:10px;float:right;"
@@ -131,11 +145,57 @@
         </el-table-column>
       </el-table>
     </el-dialog>
+
+    <el-dialog title="新建信息" :visible.sync="dialogAddVisible">
+      <el-form ref="formData" :model="formData" :rules="rules" v-loading="loading">
+        <el-form-item label="学生姓名" :label-width="formLabelWidth" prop="nickname">
+          <el-input v-model="formData.nickname"
+            autocomplete="off"
+            placeholder="请输入学生姓名"
+            maxlength="10"
+            show-word-limit>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="学号" :label-width="formLabelWidth" prop="username">
+          <el-input v-model="formData.username"
+            autocomplete="off"
+            placeholder="请输入学号"
+            maxlength="10"
+            show-word-limit>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="身份" :label-width="formLabelWidth" prop="identity">
+          <template>
+            <el-radio v-model="formData.identity" label="1">学生</el-radio>
+            <el-radio v-model="formData.identity" label="2">教师</el-radio>
+          </template>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogAddVisible = false">取 消</el-button>
+        <el-button type="primary" @click="onSubmit()">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog title="导入信息" :visible.sync="dialogUploadVisible">
+      <el-row style="margin-top:20px;" >
+        <el-col :span="12">
+          <label>学生信息表(.xls.xlsx)</label>
+        </el-col>
+        <input type="file"
+        id="avatar" name="avatar"
+        accept=".xlsx,.xls" ref="reportfile" >
+      </el-row>
+      <el-row style="padding:20px;" >
+        <el-button @click="upload" type="success" size="mini" icon="el-icon-upload2" :loading="insertLoading">导入信息</el-button>
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getUserQuery,exportExcelAll,exportExcel } from '@/api/login';
+import { importInfo } from '@/api/file'
+import { getUserQuery,exportExcelAll,exportExcel,insertUser } from '@/api/login';
 import { getUserRecord } from '@/api/record';
   export default {
     data() {
@@ -165,6 +225,23 @@ import { getUserRecord } from '@/api/record';
         pageSize: 10,
         multipleSelection: [],
 
+        /* 导入 */
+        formData:{
+        },
+        rules: {
+          nickname: [
+            {required: true, message: '学生姓名不可为空', trigger: 'blur'}
+          ],
+          username: [
+            {required: true, message: '学号不可为空', trigger: 'blur'}
+          ],
+          identity: [
+            {required: true, message: '请选择身份信息',trigger: 'blur'}
+          ]
+        },
+        insertLoading: false,
+        dialogAddVisible: false,
+        dialogUploadVisible: false,
         /* 导出 */
         allExportBtnLoading: false,
         batchExportBtnLoading: false,
@@ -258,6 +335,57 @@ import { getUserRecord } from '@/api/record';
         this.multipleSelection = val;
       },
 
+      //新建用户
+      onSubmit() {
+        this.$refs.formData.validate((valid) => {
+        if (valid) {
+          this.insertLoading = true
+          if (this.formData.identity == "学生") {
+            this.formData.identity = "student"
+          } else {
+            this.formData.identity = "teacher"
+          }
+          insertUser(this.formData).then(response => {
+            if (response.data.code == 200) {
+              this.insertLoading = false
+              this.dialogAddVisible = false
+              this.$message("新建成功")
+            } else {
+              this.insertLoading = false
+              this.$message({
+                type: 'error',
+                message:  "新建失败"
+              })
+            }
+          })
+        }
+        
+        
+        })
+      },
+
+      //表格导入
+      upload() {
+        this.loading = true;
+        let reportfile = this.$refs.reportfile;
+        let files = reportfile.files;
+        let file = files[0];
+        var formData = new FormData();
+        formData.append("file", file);
+        importInfo(formData).then(response => {
+          if (response.data.code == 200) {
+            this.loading = false
+            this.getStudents()
+            this.$message(response.data.data)
+            this.dialogUploadVisible = false
+          } else {
+            this.$message({
+              type: 'danger',
+              msg:'导入失败，请稍后重试'
+            })
+          }
+        })
+      },
 
       //批量导出
       batchExport() {

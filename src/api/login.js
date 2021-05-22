@@ -12,6 +12,15 @@ export function login(username, password) {
   })
 }
 
+//登录接口
+export function insertUser(user) { 
+  return request({ //使用封装好的 axios 进行网络请求
+    url: '/insertUser',
+    method: 'post',
+    data: user
+  })
+}
+
 //获取用户信息
 export function getUser(user_id) {
   return request({

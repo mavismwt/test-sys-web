@@ -28,7 +28,7 @@
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-          prop=""
+          prop="info"
           label="状态"
           sortable
           width="150">

@@ -27,3 +27,16 @@ export function download(path,name) {
     responseType: 'blob'
   })
 }
+
+
+//上传学生名单-教师权限
+export function importInfo(file) {
+  return request({
+    url:'/file/import',
+    method:'post',
+    data: file,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}

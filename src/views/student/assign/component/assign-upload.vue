@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { upload } from '@/api/file'
+import { upload,importInfo } from '@/api/file'
 import { updateReport,updateSource } from '@/api/record'
 
 export default {
