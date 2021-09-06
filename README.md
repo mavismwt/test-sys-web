@@ -1,6 +1,7 @@
 # test-sys-web
 
 > A Vue.js project
+> Homework collection system & C Language online judge
 
 ## Build Setup
 
